@@ -4,7 +4,7 @@ const port = 5001;
 app.use(express.json());
 
 const db = require("./firebase");
-const { collection, getDocs, updateDoc, doc, addDoc } = require("firebase/firestore");
+const { collection, getDocs, updateDoc, doc, addDoc, deleteDoc } = require("firebase/firestore");
 
 const cors = require("cors");
 app.use(cors());
@@ -30,13 +30,28 @@ app.get("/posts", async (req, res) => {
     }
 });
 
-// like a post
+// // like a post
+// app.put("/posts/:id", async (req, res) => {
+//     try {
+//         const id = req.params.id;
+//         const currentLikes = req.body.currentLikes;
+//         await updateDoc(doc(db, "users", id), {
+//             likes: currentLikes + 1,
+//             message: newMessage,
+//         });
+//         res.status(200).json({ message: "success" });
+//     } catch (e) {
+//         res.status(400).json({ error: e.message });
+//     }
+// });
+
+// update a message
 app.put("/posts/:id", async (req, res) => {
     try {
         const id = req.params.id;
-        const currentLikes = req.body.currentLikes;
+        const newMessage = req.body.message;
         await updateDoc(doc(db, "users", id), {
-            likes: currentLikes + 1,
+            message: newMessage,
         });
         res.status(200).json({ message: "success" });
     } catch (e) {
@@ -55,6 +70,17 @@ app.post("/users", async (req, res) => {
             likes: 0,
         });
         res.status(200).json({message: `Successfully created user with id ${docRef.id}`})
+    } catch (e) {
+        res.status(400).json({ error: e.message });
+    }
+});
+
+// delete a post
+app.delete("/posts/:id", async (req, res) => {
+    try {
+        const id = req.params.id;
+        await deleteDoc(doc(db, "users", id));
+        res.status(200).json({ message: "success" });
     } catch (e) {
         res.status(400).json({ error: e.message });
     }

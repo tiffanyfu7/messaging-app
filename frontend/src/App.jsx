@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
 import "./App.css";
 import axios from "axios";
+import TextField from '@mui/material/TextField';
 
 function App() {
     const [username, setUsername] = useState("");
     const [message, setMessage] = useState("");
+    const [newMessage, setNewMessage] = useState("");
     const [allData, setAllData] = useState([]);
 
     const fetchData = async () => {
@@ -25,48 +27,66 @@ function App() {
         };
         const response = await axios.post("http://localhost:5001/users", body);
         console.log(response)
+        fetchData();
         var form = document.getElementById("form");
         form.reset();
+    };
+    
+    const deleteUser = async (id) => {
+        const response = await axios.delete(`http://localhost:5001/posts/${id}`);
         fetchData();
     };
 
-    const likeUser = async (id, currentLikes) => {
+    const updateMessage = async (id, newMessage) => {
         const response = await axios.put(`http://localhost:5001/posts/${id}`, {
-            currentLikes: currentLikes,
+            message: newMessage,
         });
         fetchData();
     };
 
-    // const editMessage = async (id, newMessage) => {
-    //     const response = await axios.put(`http://localhost:5001/posts/${id}`, {
-    //         message: newMessage,
-    //     });
-    //     fetchData();
-    // };
-
     return (
         <>
-            <h2> Submit a Message to PostIt!</h2>
+            <h2>PostIt!</h2>
             <form onSubmit={handleSubmit} id="form">
-                <label>User Name: </label> <br></br>
-                <input type="text" onChange={(e) => setUsername(e.target.value)}></input>
-                <br></br>
-                <label>Message: </label> <br></br>
-                <input type="text" onChange={(e) => setMessage(e.target.value)} style={{height: "40px"}}></input>
+                <div id="username-text-field">
+                <TextField
+                    label="Username" variant="outlined"
+                    onChange={(e) => setUsername(e.target.value)}
+                />
+                </div>
+                <TextField
+                    id="message-text-field"
+                    label="Message"
+                    variant="outlined"
+                    multiline
+                    rows={4}
+                    onChange={(e) => setMessage(e.target.value)}
+                />
                 <br></br>
                 <button type="submit">Submit</button>
             </form>
             <div>
-                <h2>Messages:</h2>
+                <h2>Messages Board</h2>
                 <div className="message-container">
                     {allData.map((user, index) => (
                         <div key={index} className="message">
-                            <button>Remove</button>
+                            <button
+                                style={{backgroundColor: "#f27d66"}}
+                                onClick={() => deleteUser(user.id)}>
+                                x
+                            </button>
                             <h3> {user.username} </h3>
-                            <p> {user.message} </p>
-                            <button>Rewrite</button>
-                            <p>Likes: {user.likes}</p>
-                            <button onClick={() => likeUser(user.id, user.likes)}>Like</button>
+                            <TextField
+                                id="message-text-field"
+                                label="Message"
+                                defaultValue= {user.message}
+                                variant="standard"
+                                multiline
+                                rows={4}
+                                onChange={(e) => setNewMessage(e.target.value)}
+                            />
+                            <br></br>
+                            <button onClick={() => updateMessage(user.id, newMessage)}>Rewrite</button>
                         </div>
                     ))}
                 </div>
