@@ -30,11 +30,13 @@ function App() {
         fetchData();
         var form = document.getElementById("form");
         form.reset();
+        window.location.reload();
     };
     
     const deleteUser = async (id) => {
         const response = await axios.delete(`http://localhost:5001/posts/${id}`);
         fetchData();
+        window.location.reload();
     };
 
     const updateMessage = async (id, newMessage) => {
@@ -42,6 +44,7 @@ function App() {
             message: newMessage,
         });
         fetchData();
+        window.location.reload();
     };
 
     return (
@@ -68,7 +71,7 @@ function App() {
             <div>
                 <h2>Messages Board</h2>
                 <div className="message-container">
-                    {allData.map((user, index) => (
+                    { allData.map((user, index) => (
                         <div key={index} className="message">
                             <button
                                 style={{backgroundColor: "#f27d66"}}
@@ -77,6 +80,7 @@ function App() {
                             </button>
                             <h3> {user.username} </h3>
                             <TextField
+                                key = {index}
                                 id="message-text-field"
                                 label="Message"
                                 defaultValue= {user.message}
@@ -88,7 +92,7 @@ function App() {
                             <br></br>
                             <button onClick={() => updateMessage(user.id, newMessage)}>Rewrite</button>
                         </div>
-                    ))}
+                    )) }
                 </div>
             </div>
         </>
