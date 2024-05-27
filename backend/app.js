@@ -47,11 +47,11 @@ app.put("/posts/:id", async (req, res) => {
 // add a user
 app.post("/users", async (req, res) => {
     try {
-        const first = req.body.first;
-        const last = req.body.last;
+        const username = req.body.username;
+        const message = req.body.message;
         const docRef = await addDoc(collection(db, "users"), {
-            first: first,
-            last: last,
+            username: username,
+            message: message,
             likes: 0,
         });
         res.status(200).json({message: `Successfully created user with id ${docRef.id}`})
