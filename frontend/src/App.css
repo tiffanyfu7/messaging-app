@@ -1,0 +1,27 @@
+body {
+  font-family: Helvetica, sans-serif;
+}
+
+#form {
+  background-color: aliceblue;
+  width: 270px;
+  height: 200px;
+  text-align: center;
+  padding-top: 50px;
+  font-size: 20px;
+  margin: 10px;
+}
+
+.message-container{
+  display: inline-grid;
+  grid-template-columns: auto auto auto auto auto;
+}
+
+.message {
+  margin: 10px;
+  text-align: center;
+  padding: 20px;
+  width: 230px;
+  height: 230px;
+  background-color: rgb(246, 246, 168);
+}

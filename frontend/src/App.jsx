@@ -2,8 +2,6 @@ import { useState, useEffect } from "react";
 import "./App.css";
 import axios from "axios";
 
-const port = 5173;
-
 function App() {
     const [username, setUsername] = useState("");
     const [message, setMessage] = useState("");
@@ -27,6 +25,8 @@ function App() {
         };
         const response = await axios.post("http://localhost:5001/users", body);
         console.log(response)
+        var form = document.getElementById("form");
+        form.reset();
         fetchData();
     };
 
@@ -37,32 +37,39 @@ function App() {
         fetchData();
     };
 
+    // const editMessage = async (id, newMessage) => {
+    //     const response = await axios.put(`http://localhost:5001/posts/${id}`, {
+    //         message: newMessage,
+    //     });
+    //     fetchData();
+    // };
+
     return (
         <>
-            <h1>Welcome Submit a Message to PostIt!</h1>
-            <form onSubmit={handleSubmit}>
-                <label>User Name: </label>
+            <h2> Submit a Message to PostIt!</h2>
+            <form onSubmit={handleSubmit} id="form">
+                <label>User Name: </label> <br></br>
                 <input type="text" onChange={(e) => setUsername(e.target.value)}></input>
                 <br></br>
-                <label>Message: </label>
-                <input type="text" onChange={(e) => setMessage(e.target.value)}></input>
+                <label>Message: </label> <br></br>
+                <input type="text" onChange={(e) => setMessage(e.target.value)} style={{height: "40px"}}></input>
                 <br></br>
                 <button type="submit">Submit</button>
             </form>
             <div>
-                <h2>Users:</h2>
-                {allData.map((user, index) => (
-                    <div key={index} style={{ display: "flex", gap: "2rem", alignItems: "center" }}>
-                        <h3>
-                            {user.username}
-                        </h3>
-                        <h5>
-                            {user.message}
-                        </h5>
-                        <p>Likes: {user.likes}</p>
-                        <button onClick={() => likeUser(user.id, user.likes)}>Like</button>
-                    </div>
-                ))}
+                <h2>Messages:</h2>
+                <div className="message-container">
+                    {allData.map((user, index) => (
+                        <div key={index} className="message">
+                            <button>Remove</button>
+                            <h3> {user.username} </h3>
+                            <p> {user.message} </p>
+                            <button>Rewrite</button>
+                            <p>Likes: {user.likes}</p>
+                            <button onClick={() => likeUser(user.id, user.likes)}>Like</button>
+                        </div>
+                    ))}
+                </div>
             </div>
         </>
     );
