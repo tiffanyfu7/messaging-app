@@ -5,8 +5,8 @@ import axios from "axios";
 const port = 5173;
 
 function App() {
-    const [first, setFirst] = useState("");
-    const [last, setLast] = useState("");
+    const [username, setUsername] = useState("");
+    const [message, setMessage] = useState("");
     const [allData, setAllData] = useState([]);
 
     const fetchData = async () => {
@@ -22,8 +22,8 @@ function App() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         const body = {
-            first: first,
-            last: last,
+            username: username,
+            message: message,
         };
         const response = await axios.post("http://localhost:5001/users", body);
         console.log(response)
@@ -39,13 +39,13 @@ function App() {
 
     return (
         <>
-            <h1>Welcome!</h1>
+            <h1>Welcome Submit a Message to PostIt!</h1>
             <form onSubmit={handleSubmit}>
-                <label>First Name: </label>
-                <input type="text" onChange={(e) => setFirst(e.target.value)}></input>
+                <label>User Name: </label>
+                <input type="text" onChange={(e) => setUsername(e.target.value)}></input>
                 <br></br>
-                <label>Last Name: </label>
-                <input type="text" onChange={(e) => setLast(e.target.value)}></input>
+                <label>Message: </label>
+                <input type="text" onChange={(e) => setMessage(e.target.value)}></input>
                 <br></br>
                 <button type="submit">Submit</button>
             </form>
@@ -54,8 +54,11 @@ function App() {
                 {allData.map((user, index) => (
                     <div key={index} style={{ display: "flex", gap: "2rem", alignItems: "center" }}>
                         <h3>
-                            {user.first} {user.last}
+                            {user.username}
                         </h3>
+                        <h5>
+                            {user.message}
+                        </h5>
                         <p>Likes: {user.likes}</p>
                         <button onClick={() => likeUser(user.id, user.likes)}>Like</button>
                     </div>
